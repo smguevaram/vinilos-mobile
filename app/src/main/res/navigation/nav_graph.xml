@@ -7,11 +7,9 @@
     <fragment
         android:id="@+id/collectorFragment"
         android:name="com.example.vinyls_jetpack_application.ui.CollectorFragment"
-        android:label="collector_fragment"
+        android:label="Coleccionistas"
         tools:layout="@layout/collector_fragment" >
-        <action
-            android:id="@+id/action_collectorFragment_to_albumFragment"
-            app:destination="@id/albumFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
