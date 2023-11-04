@@ -8,45 +8,45 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
-import com.example.vinyls_jetpack_application.databinding.AlbumItemBinding
-import com.example.vinyls_jetpack_application.models.Album
+import com.example.vinyls_jetpack_application.databinding.ArtistItemBinding
+import com.example.vinyls_jetpack_application.models.Artist
 
-class ArtistsAdapter : RecyclerView.Adapter<ArtistsAdapter.AlbumViewHolder>(){
+class ArtistsAdapter : RecyclerView.Adapter<ArtistsAdapter.ArtistViewHolder>(){
 
-    var albums :List<Album> = emptyList()
+    var artists :List<Artist> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
-        val withDataBinding: AlbumItemBinding = DataBindingUtil.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
+        val withDataBinding: ArtistItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            AlbumViewHolder.LAYOUT,
+            ArtistViewHolder.LAYOUT,
             parent,
             false)
-        return AlbumViewHolder(withDataBinding)
+        return ArtistViewHolder(withDataBinding)
     }
 
-    override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         holder.viewDataBinding.also {
-            it.album = albums[position]
+            it.artist = artists[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-            Log.d("AlbumsAdapter", "Clicked on ${albums[position].name}")
+            Log.d("ArtistsAdapter", "Clicked on ${artists[position].name}")
         }
     }
 
     override fun getItemCount(): Int {
-        return albums.size
+        return artists.size
     }
 
 
-    class AlbumViewHolder(val viewDataBinding: AlbumItemBinding) :
+    class ArtistViewHolder(val viewDataBinding: ArtistItemBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
         companion object {
             @LayoutRes
-            val LAYOUT = R.layout.album_item
+            val LAYOUT = R.layout.artist_item
         }
     }
 

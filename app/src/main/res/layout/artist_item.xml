@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="album" type="com.example.vinyls_jetpack_application.models.Album"/>
+        <variable name="artist" type="com.example.vinyls_jetpack_application.models.Artist"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="@{album.name}" />
+                    android:text="@{artist.name}" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

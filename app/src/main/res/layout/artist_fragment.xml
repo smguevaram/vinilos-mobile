@@ -17,10 +17,10 @@
         android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/albumsRv"
+        android:id="@+id/artistsRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        tools:listitem="@layout/album_item" />
+        tools:listitem="@layout/artist_item" />
 
 </FrameLayout>
