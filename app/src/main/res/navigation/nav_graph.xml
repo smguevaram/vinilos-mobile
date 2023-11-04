@@ -14,11 +14,8 @@
     <fragment
         android:id="@+id/albumFragment"
         android:name="com.example.vinyls_jetpack_application.ui.AlbumFragment"
-        android:label="album_fragment"
+        android:label="Albums"
         tools:layout="@layout/album_fragment" >
-        <action
-            android:id="@+id/action_albumFragment_to_commentFragment"
-            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentFragment"
