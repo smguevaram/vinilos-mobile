@@ -26,4 +26,10 @@
             android:name="albumId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/artistFragment"
+        android:name="com.example.vinyls_jetpack_application.ui.ArtistFragment"
+        android:label="Artists"
+        tools:layout="@layout/artist_fragment" >
+    </fragment>
 </navigation>

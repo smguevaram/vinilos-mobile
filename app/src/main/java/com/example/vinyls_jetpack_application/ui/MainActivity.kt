@@ -42,14 +42,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
-            R.id.menu_collectors -> {
-                navController.navigate(R.id.collectorFragment)
-                true
-            }
             R.id.menu_albums -> {
                 navController.navigate(R.id.albumFragment)
                 true
             }
+            R.id.menu_artists -> {
+                navController.navigate(R.id.artistFragment)
+                true
+            }
+            R.id.menu_collectors -> {
+                navController.navigate(R.id.collectorFragment)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -2,15 +2,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.vinyls_jetpack_application.ui.MainActivity">
-    <item
-        android:id="@+id/menu_collectors"
-        android:orderInCategory="100"
-        android:title="Collectors"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_albums"
         android:orderInCategory="100"
         android:title="Albums"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_artists"
+        android:orderInCategory="100"
+        android:title="Artistas"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_collectors"
+        android:orderInCategory="100"
+        android:title="Coleccionistas"
         app:showAsAction="never" />
 </menu>
