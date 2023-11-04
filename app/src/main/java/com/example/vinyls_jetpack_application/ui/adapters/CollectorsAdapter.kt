@@ -1,5 +1,6 @@
 package com.example.vinyls_jetpack_application.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -9,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
 import com.example.vinyls_jetpack_application.databinding.CollectorItemBinding
 import com.example.vinyls_jetpack_application.models.Collector
-import com.example.vinyls_jetpack_application.ui.CollectorFragmentDirections
 
 class CollectorsAdapter : RecyclerView.Adapter<CollectorsAdapter.CollectorViewHolder>(){
 
@@ -33,9 +33,7 @@ class CollectorsAdapter : RecyclerView.Adapter<CollectorsAdapter.CollectorViewHo
             it.collector = collectors[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-            val action = CollectorFragmentDirections.actionCollectorFragmentToAlbumFragment()
-            // Navigate using that action
-            holder.viewDataBinding.root.findNavController().navigate(action)
+            Log.d("CollectorAdapter", "Clicked on ${collectors[position].name}")
         }
     }
 
