@@ -2,15 +2,15 @@ package com.example.vinyls_jetpack_application.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.vinyls_jetpack_application.models.Album
+import com.example.vinyls_jetpack_application.models.Artist
 import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
 
 class ArtistViewModel(application: Application) :  AndroidViewModel(application) {
 
-    private val _albums = MutableLiveData<List<Album>>()
+    private val _artists = MutableLiveData<List<Artist>>()
 
-    val albums: LiveData<List<Album>>
-        get() = _albums
+    val artists: LiveData<List<Artist>>
+        get() = _artists
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
 
@@ -27,8 +27,8 @@ class ArtistViewModel(application: Application) :  AndroidViewModel(application)
     }
 
     private fun refreshDataFromNetwork() {
-        NetworkServiceAdapter.getInstance(getApplication()).getAlbums({
-            _albums.postValue(it)
+        NetworkServiceAdapter.getInstance(getApplication()).getArtists({
+            _artists.postValue(it)
             _eventNetworkError.value = false
             _isNetworkErrorShown.value = false
         },{
