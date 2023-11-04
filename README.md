@@ -14,7 +14,9 @@ Para instalar y ejecutar la aplicación en tu entorno local, sigue estos pasos:
       https://github.com/smguevaram/vinilos-mobile.git 
    ```
 
-2. Abre el proyecto en Android Studio.
+2. Abre el proyecto en Android Studio. seleccionando Get from VCS
+![image](https://github.com/smguevaram/vinilos-mobile/assets/16739542/b69bf8c8-1d9b-4c4a-b5e9-c4f1437053bc)
+
 
 3. Configura un emulador de Android o conecta un dispositivo físico.
 
