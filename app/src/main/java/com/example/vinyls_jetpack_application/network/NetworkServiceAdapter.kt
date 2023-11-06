@@ -10,6 +10,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.vinyls_jetpack_application.models.Album
+import com.example.vinyls_jetpack_application.models.Artist
 import com.example.vinyls_jetpack_application.models.Collector
 import com.example.vinyls_jetpack_application.models.Comment
 import org.json.JSONArray
@@ -32,32 +33,59 @@ class NetworkServiceAdapter constructor(context: Context) {
     }
     fun getAlbums(onComplete:(resp:List<Album>)->Unit, onError: (error:VolleyError)->Unit){
         requestQueue.add(getRequest("albums",
-            Response.Listener<String> { response ->
+            { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<Album>()
                 for (i in 0 until resp.length()) {
                     val item = resp.getJSONObject(i)
-                    list.add(i, Album(albumId = item.getInt("id"),name = item.getString("name"), cover = item.getString("cover"), recordLabel = item.getString("recordLabel"), releaseDate = item.getString("releaseDate"), genre = item.getString("genre"), description = item.getString("description")))
+                    list.add(i, Album(id = item.getInt("id"),name = item.getString("name"), cover = item.getString("cover"), recordLabel = item.getString("recordLabel"), releaseDate = item.getString("releaseDate"), genre = item.getString("genre"), description = item.getString("description"), tracks = listOf(), comments = listOf()))
                 }
                 onComplete(list)
             },
-            Response.ErrorListener {
+            {
                 onError(it)
             }))
     }
+
+    fun getArtists(onComplete:(resp:List<Artist>)->Unit, onError: (error:VolleyError)->Unit){
+        requestQueue.add(getRequest("musicians",
+            { response ->
+                val resp = JSONArray(response)
+                val list = mutableListOf<Artist>()
+                for (i in 0 until resp.length()) {
+                    val item = resp.getJSONObject(i)
+                    list.add(i,
+                        Artist(
+                            id = item.getInt("id"),
+                            name = item.getString("name"),
+                            image = item.getString("image"),
+                            description = item.getString("description"),
+                            birthDate = item.getString("birthDate"),
+                            albums = listOf(),
+                            performerPrizes = listOf()
+                        )
+                    )
+                }
+                onComplete(list)
+            },
+            {
+                onError(it)
+            }))
+    }
+
     fun getCollectors(onComplete:(resp:List<Collector>)->Unit, onError: (error:VolleyError)->Unit) {
         requestQueue.add(getRequest("collectors",
-            Response.Listener<String> { response ->
-                Log.d("tagb", response)
+            { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<Collector>()
                 for (i in 0 until resp.length()) {
                     val item = resp.getJSONObject(i)
-                    list.add(i, Collector(collectorId = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email")))
+                    list.add(i, Collector(id = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email"),
+                        collectorAlbums = listOf(), comments = listOf(), favoritePerformers = listOf()))
                 }
                 onComplete(list)
             },
-            Response.ErrorListener {
+            {
                 onError(it)
                 Log.d("", it.message.toString())
             }))
@@ -71,7 +99,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                 for (i in 0 until resp.length()) {
                     item = resp.getJSONObject(i)
                     Log.d("Response", item.toString())
-                    list.add(i, Comment(albumId = albumId, rating = item.getInt("rating").toString(), description = item.getString("description")))
+                    list.add(i, Comment(id = albumId, rating = item.getInt("rating").toString(), description = item.getString("description")))
                 }
                 onComplete(list)
             },
