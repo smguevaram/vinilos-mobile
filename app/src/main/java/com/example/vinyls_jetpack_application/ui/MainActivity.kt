@@ -2,11 +2,7 @@ package com.example.vinyls_jetpack_application.ui
 
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
@@ -33,6 +29,23 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.my_toolbar))
         setupActionBarWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            invalidateOptionsMenu()
+        }
+
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val currentFragmentId = navController.currentDestination?.id
+
+        when (currentFragmentId) {
+            R.id.albumFragment -> menu.removeItem(R.id.menu_albums)
+            R.id.collectorFragment -> menu.removeItem(R.id.menu_collectors)
+            R.id.artistFragment -> menu.removeItem(R.id.menu_artists)
+        }
+
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
