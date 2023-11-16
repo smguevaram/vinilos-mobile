@@ -30,6 +30,19 @@
         android:id="@+id/artistFragment"
         android:name="com.example.vinyls_jetpack_application.ui.ArtistFragment"
         android:label="Artists"
-        tools:layout="@layout/artist_fragment" >
+        tools:layout="@layout/artist_fragment"
+        >
+        <action
+            android:id="@+id/action_artistFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.example.vinyls_jetpack_application.ui.ArtistDetailFragment"
+        android:label="artist_detail_fragment"
+        tools:layout="@layout/artist_detail_fragment" >
+        <argument
+            android:name="artistId"
+            app:argType="integer" />
     </fragment>
 </navigation>

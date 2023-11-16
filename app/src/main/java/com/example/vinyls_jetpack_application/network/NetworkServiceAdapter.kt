@@ -73,6 +73,26 @@ class NetworkServiceAdapter constructor(context: Context) {
             }))
     }
 
+    fun getArtist(id:Int, onComplete:(resp:Artist)->Unit, onError: (error:VolleyError)->Unit){
+        requestQueue.add(getRequest("musicians/$id",
+            { response ->
+                val item = JSONObject(response)
+                val artist = Artist(
+                    id = item.getInt("id"),
+                    name = item.getString("name"),
+                    image = item.getString("image"),
+                    description = item.getString("description"),
+                    birthDate = item.getString("birthDate"),
+                    albums = listOf(),
+                    performerPrizes = listOf()
+                )
+                onComplete(artist)
+            },
+            {
+                onError(it)
+            }))
+    }
+
     fun getCollectors(onComplete:(resp:List<Collector>)->Unit, onError: (error:VolleyError)->Unit) {
         requestQueue.add(getRequest("collectors",
             { response ->
