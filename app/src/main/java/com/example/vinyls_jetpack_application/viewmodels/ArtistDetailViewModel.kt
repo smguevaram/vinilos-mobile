@@ -6,12 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.vinyls_jetpack_application.models.Artist
 import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
+import com.example.vinyls_jetpack_application.repository.ArtistRepository
+import kotlinx.coroutines.launch
 
 class ArtistDetailViewModel(application: Application, artistId: Int) :  AndroidViewModel(application)  {
 
     private val _artist= MutableLiveData<Artist>();
+
+    private val _artistRepository = ArtistRepository(application)
 
     val artist: MutableLiveData<Artist>
         get() = _artist
@@ -34,13 +39,17 @@ class ArtistDetailViewModel(application: Application, artistId: Int) :  AndroidV
     }
 
     private fun refreshDataFromNetwork() {
-        NetworkServiceAdapter.getInstance(getApplication()).getArtist(id, {
-            _artist.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        },{
-            _eventNetworkError.value = true
-        })
+        viewModelScope.launch {
+            var data: Artist? = _artistRepository.getArtist(id)
+
+            if(data != null) {
+                _artist.postValue(data)
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } else {
+                _eventNetworkError.value = true
+            }
+        }
     }
 
 
