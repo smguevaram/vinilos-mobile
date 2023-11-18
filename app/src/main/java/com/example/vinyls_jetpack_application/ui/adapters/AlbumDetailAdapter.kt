@@ -18,7 +18,7 @@ class AlbumDetailAdapter: RecyclerView.Adapter<AlbumDetailAdapter.AlbumViewHolde
     var albumsDetail : Album? = null
         set(value) {
             field = value
-            notifyDataSetChanged()
+            notifyItemChanged(0)
         }
 
 

@@ -18,7 +18,7 @@ class ArtistDetailAdapter: RecyclerView.Adapter<ArtistDetailAdapter.ArtistViewHo
     var artistsDetail : Artist? = null
         set(value) {
             field = value
-            notifyDataSetChanged()
+            notifyItemChanged(0)
         }
 
 
