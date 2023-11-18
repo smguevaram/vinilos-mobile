@@ -24,7 +24,10 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
     var albumsDetail : Album? = null
         set(value) {
             field = value
-            notifyDataSetChanged()
+            val posicionDelAlbum = albums.indexOf(value)
+            if (posicionDelAlbum != -1) {
+                notifyItemChanged(posicionDelAlbum)
+            }
         }
 
     var mode: Boolean = false
@@ -32,8 +35,6 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
             field = value
             notifyDataSetChanged()
         }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         val withDataBinding: AlbumItemBinding = DataBindingUtil.inflate(

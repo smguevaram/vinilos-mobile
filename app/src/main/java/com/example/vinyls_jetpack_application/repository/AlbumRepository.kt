@@ -40,7 +40,7 @@ class AlbumRepository (val application: Application,  val albumsDao: AlbumDao) {
             } ?: return emptyList()
         } else {
             return withContext(Dispatchers.IO) {
-                albumsDao.getAllAlbums() ?: emptyList()
+                albumsDao.getAllAlbums()
             }
         }
     }

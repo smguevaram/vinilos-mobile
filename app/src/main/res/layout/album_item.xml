@@ -48,7 +48,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:layout_weight="0"
-                    app:srcCompat="@drawable/arrow" />
+                    app:srcCompat="@drawable/arrow"
+                    android:importantForAccessibility="no" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,7 +39,7 @@ class ArtistRepository (val application: Application, val artistsDao: ArtistDao)
             } ?: return emptyList()
         } else {
             return withContext(Dispatchers.IO) {
-                artistsDao.getAllArtists() ?: emptyList()
+                artistsDao.getAllArtists()
             }
         }
     }
