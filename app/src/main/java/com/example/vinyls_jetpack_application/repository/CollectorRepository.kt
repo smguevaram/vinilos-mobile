@@ -40,7 +40,7 @@ class CollectorRepository (val application: Application, val collectorsDao: Coll
             } ?: return emptyList()
         } else {
             return withContext(Dispatchers.IO) {
-                collectorsDao.getAllCollectors() ?: emptyList()
+                collectorsDao.getAllCollectors()
             }
         }
     }
