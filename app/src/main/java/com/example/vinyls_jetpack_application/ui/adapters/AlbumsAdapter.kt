@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
 import com.example.vinyls_jetpack_application.databinding.AlbumItemBinding
 import com.example.vinyls_jetpack_application.models.Album
+import com.example.vinyls_jetpack_application.ui.AlbumFragmentDirections
 
 class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
 
@@ -18,6 +19,21 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
             field = value
             notifyDataSetChanged()
         }
+
+
+    var albumsDetail : Album? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var mode: Boolean = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         val withDataBinding: AlbumItemBinding = DataBindingUtil.inflate(
@@ -28,14 +44,21 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
         return AlbumViewHolder(withDataBinding)
     }
 
-    override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AlbumsAdapter.AlbumViewHolder, position: Int) {
         holder.viewDataBinding.also {
+            Log.d("AlbumsAdapter", "album: $albumsDetail")
             it.album = albums[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-            Log.d("AlbumsAdapter", "Clicked on ${albums[position].name}")
+            Log.d("AlbumsAdapter", "Clicked on ${albums[position]}")
+            Log.d("AlbumsAdapter", "mode: $mode")
+            albumsDetail = albums[position]
+            val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(albums[position].id)
+            // Navigate using that action
+            holder.viewDataBinding.root.findNavController().navigate(action)
         }
     }
+
 
     override fun getItemCount(): Int {
         return albums.size
