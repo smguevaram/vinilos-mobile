@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
+import com.example.vinyls_jetpack_application.database.dao.AppDatabase
 import com.example.vinyls_jetpack_application.databinding.AlbumFragmentBinding
 import com.example.vinyls_jetpack_application.models.Album
 import com.example.vinyls_jetpack_application.ui.adapters.AlbumsAdapter
@@ -48,7 +49,11 @@ class AlbumFragment : Fragment() {
             "You can only access the viewModel after onActivityCreated()"
         }
         activity.actionBar?.title = getString(R.string.title_albums)
-        viewModel = ViewModelProvider(this, AlbumViewModel.Factory(activity.application)).get(AlbumViewModel::class.java)
+
+        val database = AppDatabase.getDatabase(activity.application)
+        val albumsDao = database.albumDao()
+
+        viewModel = ViewModelProvider(this, AlbumViewModel.Factory(activity.application, albumsDao)).get(AlbumViewModel::class.java)
         viewModel.albums.observe(viewLifecycleOwner, Observer<List<Album>> {
             it.apply {
                 viewModelAdapter!!.albums = this

@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/artistDetailFragment"
         android:name="com.example.vinyls_jetpack_application.ui.ArtistDetailFragment"
-        android:label="artist_detail_fragment"
+        android:label="Artista"
         tools:layout="@layout/artist_detail_fragment" >
         <argument
             android:name="artistId"
@@ -51,7 +51,7 @@
     <fragment
         android:id="@+id/albumDetailFragment"
         android:name="com.example.vinyls_jetpack_application.ui.AlbumDetailFragment"
-        android:label="album_detail_fragment"
+        android:label="Album"
         tools:layout="@layout/album_detail_fragment" >
         <argument
             android:name="albumId"

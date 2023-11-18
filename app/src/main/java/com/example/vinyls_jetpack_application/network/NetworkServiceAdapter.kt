@@ -46,9 +46,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                             recordLabel = item.getString("recordLabel"),
                             releaseDate = item.getString("releaseDate"),
                             genre = item.getString("genre"),
-                            description = item.getString("description"),
-                            tracks = listOf(),
-                            comments = listOf())
+                            description = item.getString("description"),)
                     )
                 }
                 onComplete(list)
@@ -70,8 +68,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                     releaseDate = item.getString("releaseDate"),
                     genre = item.getString("genre"),
                     description = item.getString("description"),
-                    tracks = listOf(),
-                    comments = listOf()
                 )
                 onComplete(album)
             },
@@ -95,8 +91,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                             image = item.getString("image"),
                             description = item.getString("description"),
                             birthDate = item.getString("birthDate"),
-                            albums = listOf(),
-                            performerPrizes = listOf()
                         )
                     )
                 }
@@ -117,8 +111,6 @@ class NetworkServiceAdapter constructor(context: Context) {
                     image = item.getString("image"),
                     description = item.getString("description"),
                     birthDate = item.getString("birthDate"),
-                    albums = listOf(),
-                    performerPrizes = listOf()
                 )
                 onComplete(artist)
             },
@@ -134,8 +126,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                 val list = mutableListOf<Collector>()
                 for (i in 0 until resp.length()) {
                     val item = resp.getJSONObject(i)
-                    list.add(i, Collector(id = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email"),
-                        collectorAlbums = listOf(), comments = listOf(), favoritePerformers = listOf()))
+                    list.add(i, Collector(id = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email")))
                 }
                 onComplete(list)
             },
