@@ -7,16 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.vinyls_jetpack_application.database.dao.ArtistDao
 import com.example.vinyls_jetpack_application.models.Artist
 import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
 import com.example.vinyls_jetpack_application.repository.ArtistRepository
 import kotlinx.coroutines.launch
 
-class ArtistDetailViewModel(application: Application, artistId: Int) :  AndroidViewModel(application)  {
+class ArtistDetailViewModel(application: Application, artistId: Int, private val artistsDao: ArtistDao) :  AndroidViewModel(application)  {
 
     private val _artist= MutableLiveData<Artist>();
 
-    private val _artistRepository = ArtistRepository(application)
+    private val _artistRepository = ArtistRepository(application, artistsDao)
 
     val artist: MutableLiveData<Artist>
         get() = _artist
@@ -57,11 +58,11 @@ class ArtistDetailViewModel(application: Application, artistId: Int) :  AndroidV
         _isNetworkErrorShown.value = true
     }
 
-    class Factory(val app: Application, val artistId: Int) : ViewModelProvider.Factory {
+    class Factory(val app: Application, val artistId: Int, private val artistsDao: ArtistDao) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ArtistDetailViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return ArtistDetailViewModel(app, artistId) as T
+                return ArtistDetailViewModel(app, artistId, artistsDao) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

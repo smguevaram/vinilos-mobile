@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
+import com.example.vinyls_jetpack_application.database.dao.AppDatabase
 import com.example.vinyls_jetpack_application.databinding.ArtistFragmentBinding
 import com.example.vinyls_jetpack_application.models.Artist
 import com.example.vinyls_jetpack_application.ui.adapters.ArtistsAdapter
@@ -48,7 +49,11 @@ class ArtistFragment : Fragment() {
             "You can only access the viewModel after onActivityCreated()"
         }
         activity.actionBar?.title = "Artist"
-        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application)).get(ArtistViewModel::class.java)
+
+        val database = AppDatabase.getDatabase(activity.application)
+        val artistsDao = database.artistDao()
+
+        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application, artistsDao)).get(ArtistViewModel::class.java)
         viewModel.artists.observe(viewLifecycleOwner, Observer<List<Artist>> {
             it.apply {
                 viewModelAdapter!!.artists = this

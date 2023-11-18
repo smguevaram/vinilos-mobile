@@ -1,20 +1,20 @@
 package com.example.vinyls_jetpack_application.viewmodels
 
+import com.example.vinyls_jetpack_application.database.dao.ArtistDao
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.vinyls_jetpack_application.models.Artist
-import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
 import com.example.vinyls_jetpack_application.repository.ArtistRepository
 import kotlinx.coroutines.launch
 
-class ArtistViewModel(application: Application) :  AndroidViewModel(application) {
+class ArtistViewModel(application: Application, private val artistsDao: ArtistDao) :  AndroidViewModel(application) {
 
     private val _artists = MutableLiveData<List<Artist>>()
 
     val artists: LiveData<List<Artist>>
         get() = _artists
 
-    val _artistsRepository = ArtistRepository(application)
+    val _artistsRepository = ArtistRepository(application, artistsDao)
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
 
@@ -49,11 +49,11 @@ class ArtistViewModel(application: Application) :  AndroidViewModel(application)
         _isNetworkErrorShown.value = true
     }
 
-    class Factory(val app: Application) : ViewModelProvider.Factory {
+    class Factory(val app: Application, private val artistsDao: ArtistDao) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ArtistViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return ArtistViewModel(app) as T
+                return ArtistViewModel(app, artistsDao) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
