@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import android.content.Context
 import com.example.vinyls_jetpack_application.models.Artist
 
-@Database(entities = [Artist::class], version = 1, exportSchema = false)
+@Database(entities = [Artist::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun artistDao(): ArtistDao
