@@ -15,8 +15,8 @@ interface ArtistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(artists: List<Artist>)
     @Query("SELECT * FROM artists_table")
-    fun getAllArtists(): LiveData<List<Artist>>
+    fun getAllArtists(): List<Artist>
 
     @Query("SELECT * FROM artists_table WHERE id = :artistId")
-    fun getArtistById(artistId: Int): LiveData<Artist>
+    fun getArtistById(artistId: Int): Artist
 }

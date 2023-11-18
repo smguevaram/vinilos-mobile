@@ -58,7 +58,7 @@ class ArtistDetailViewModel(application: Application, artistId: Int, private val
         _isNetworkErrorShown.value = true
     }
 
-    class Factory(val app: Application, val artistId: Int, private val artistsDao: ArtistDao) : ViewModelProvider.Factory {
+    class Factory(val app: Application, val artistId: Int, val artistsDao: ArtistDao) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ArtistDetailViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")

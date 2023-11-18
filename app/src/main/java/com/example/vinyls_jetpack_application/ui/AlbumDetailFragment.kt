@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
+import com.example.vinyls_jetpack_application.database.dao.AppDatabase
 import com.example.vinyls_jetpack_application.databinding.AlbumDetailFragmentBinding
 import com.example.vinyls_jetpack_application.databinding.CommentFragmentBinding
 import com.example.vinyls_jetpack_application.models.Album
@@ -57,7 +58,11 @@ class AlbumDetailFragment : Fragment() {
         activity.actionBar?.title = "detalle album"
         val args: AlbumDetailFragmentArgs by navArgs()
         Log.d("Args", args.albumId.toString())
-        viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(activity.application,args.albumId)).get(AlbumDetailViewModel::class.java)
+
+        val database = AppDatabase.getDatabase(activity.application)
+        val albumsDao = database.albumDao()
+
+        viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(activity.application,args.albumId, albumsDao)).get(AlbumDetailViewModel::class.java)
         viewModel.album.observe(viewLifecycleOwner, Observer<Album> {
             it.apply {
                 viewModelAdapter!!.albumsDetail = this

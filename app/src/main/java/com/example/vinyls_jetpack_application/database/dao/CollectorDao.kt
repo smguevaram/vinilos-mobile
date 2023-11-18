@@ -11,11 +11,11 @@ import com.example.vinyls_jetpack_application.models.Collector
 interface CollectorDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(collectors: List<Collector>)
+    fun insert(collectors: List<Collector>)
 
     @Query("SELECT * FROM collectors_table")
-    fun getAllCollectors(): LiveData<List<Collector>>
+    fun getAllCollectors(): List<Collector>
 
     @Query("SELECT * FROM collectors_table WHERE id = :collectorId")
-    fun getCollectorById(collectorId: Int): LiveData<Collector>
+    fun getCollectorById(collectorId: Int): Collector
 }

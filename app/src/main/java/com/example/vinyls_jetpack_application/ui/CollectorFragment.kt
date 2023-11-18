@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
+import com.example.vinyls_jetpack_application.database.dao.AppDatabase
 import com.example.vinyls_jetpack_application.databinding.CollectorFragmentBinding
 import com.example.vinyls_jetpack_application.models.Collector
 import com.example.vinyls_jetpack_application.ui.adapters.CollectorsAdapter
@@ -48,7 +49,11 @@ class CollectorFragment : Fragment() {
             "You can only access the viewModel after onActivityCreated()"
         }
         activity.actionBar?.title = getString(R.string.title_collectors)
-        viewModel = ViewModelProvider(this, CollectorViewModel.Factory(activity.application)).get(CollectorViewModel::class.java)
+
+        val database = AppDatabase.getDatabase(activity.application)
+        val collectorDao = database.collectorDao()
+
+        viewModel = ViewModelProvider(this, CollectorViewModel.Factory(activity.application, collectorDao)).get(CollectorViewModel::class.java)
         viewModel.collectors.observe(viewLifecycleOwner, Observer<List<Collector>> {
             it.apply {
                 viewModelAdapter!!.collectors = this

@@ -10,8 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.log
 
-class ArtistRepository (val application: Application, private val artistsDao: ArtistDao){
+class ArtistRepository (val application: Application, val artistsDao: ArtistDao){
 
     suspend fun refreshArtists(): List<Artist> {
         val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -32,12 +33,13 @@ class ArtistRepository (val application: Application, private val artistsDao: Ar
             artistsFromNetwork?.let { artists ->
                 withContext(Dispatchers.IO) {
                     artistsDao.insertAll(artists)
+
                 }
                 return artists
             } ?: return emptyList()
         } else {
             return withContext(Dispatchers.IO) {
-                artistsDao.getAllArtists().value ?: emptyList()
+                artistsDao.getAllArtists() ?: emptyList()
             }
         }
     }
@@ -67,7 +69,7 @@ class ArtistRepository (val application: Application, private val artistsDao: Ar
             }
         }
         return withContext(Dispatchers.IO) {
-            artistsDao.getArtistById(id).value
+            artistsDao.getArtistById(id)
         }
     }
 
