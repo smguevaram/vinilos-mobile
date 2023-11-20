@@ -1,24 +1,26 @@
 package com.example.vinyls_jetpack_application.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.vinyls_jetpack_application.database.dao.ArtistDao
-import com.example.vinyls_jetpack_application.database.dao.CollectorDao
 import com.example.vinyls_jetpack_application.models.Artist
-import com.example.vinyls_jetpack_application.models.Collector
 import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
 import com.example.vinyls_jetpack_application.repository.ArtistRepository
-import com.example.vinyls_jetpack_application.repository.CollectorRepository
 import kotlinx.coroutines.launch
 
-class CollectorViewModel(application: Application, collectorsDao: CollectorDao) :  AndroidViewModel(application) {
+class ArtistDetailViewModel(application: Application, artistId: Int, private val artistsDao: ArtistDao) :  AndroidViewModel(application)  {
 
-    private val _collectors = MutableLiveData<List<Collector>>()
+    private val _artist= MutableLiveData<Artist>();
 
-    val collectors: LiveData<List<Collector>>
-        get() = _collectors
+    private val _artistRepository = ArtistRepository(application, artistsDao)
 
-    val _collectorsRepository = CollectorRepository(application, collectorsDao)
+    val artist: MutableLiveData<Artist>
+        get() = _artist
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
 
@@ -30,16 +32,19 @@ class CollectorViewModel(application: Application, collectorsDao: CollectorDao) 
     val isNetworkErrorShown: LiveData<Boolean>
         get() = _isNetworkErrorShown
 
+    val id:Int = artistId
+
+
     init {
         refreshDataFromNetwork()
     }
 
     private fun refreshDataFromNetwork() {
         viewModelScope.launch {
-            var data: List<Collector>? = _collectorsRepository.refreshCollectors()
+            var data: Artist? = _artistRepository.getArtist(id)
 
             if(data != null) {
-                _collectors.postValue(data)
+                _artist.postValue(data)
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } else {
@@ -48,15 +53,16 @@ class CollectorViewModel(application: Application, collectorsDao: CollectorDao) 
         }
     }
 
+
     fun onNetworkErrorShown() {
         _isNetworkErrorShown.value = true
     }
 
-    class Factory(val app: Application, val collectorsDao: CollectorDao) : ViewModelProvider.Factory {
+    class Factory(val app: Application, val artistId: Int, val artistsDao: ArtistDao) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(CollectorViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(ArtistDetailViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return CollectorViewModel(app, collectorsDao) as T
+                return ArtistDetailViewModel(app, artistId, artistsDao) as T
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }

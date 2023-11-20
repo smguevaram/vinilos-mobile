@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
 import com.example.vinyls_jetpack_application.databinding.ArtistItemBinding
 import com.example.vinyls_jetpack_application.models.Artist
+import com.example.vinyls_jetpack_application.ui.ArtistFragmentDirections
 
 class ArtistsAdapter : RecyclerView.Adapter<ArtistsAdapter.ArtistViewHolder>(){
 
@@ -19,7 +20,20 @@ class ArtistsAdapter : RecyclerView.Adapter<ArtistsAdapter.ArtistViewHolder>(){
             notifyDataSetChanged()
         }
 
+    var artistsDetail : Artist? = null
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    var mode: Boolean = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
+
         val withDataBinding: ArtistItemBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             ArtistViewHolder.LAYOUT,
@@ -30,10 +44,16 @@ class ArtistsAdapter : RecyclerView.Adapter<ArtistsAdapter.ArtistViewHolder>(){
 
     override fun onBindViewHolder(holder: ArtistViewHolder, position: Int) {
         holder.viewDataBinding.also {
+            Log.d("ArtistsAdapter", "artist: $artistsDetail")
             it.artist = artists[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-            Log.d("ArtistsAdapter", "Clicked on ${artists[position].name}")
+            Log.d("ArtistsAdapter", "Clicked on ${artists[position]}")
+            Log.d("ArtistsAdapter", "mode: $mode")
+            artistsDetail = artists[position]
+            val action = ArtistFragmentDirections.actionArtistFragmentToArtistDetailFragment(artists[position].id)
+            // Navigate using that action
+            holder.viewDataBinding.root.findNavController().navigate(action)
         }
     }
 

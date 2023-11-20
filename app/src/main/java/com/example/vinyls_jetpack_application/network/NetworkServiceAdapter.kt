@@ -38,7 +38,16 @@ class NetworkServiceAdapter constructor(context: Context) {
                 val list = mutableListOf<Album>()
                 for (i in 0 until resp.length()) {
                     val item = resp.getJSONObject(i)
-                    list.add(i, Album(id = item.getInt("id"),name = item.getString("name"), cover = item.getString("cover"), recordLabel = item.getString("recordLabel"), releaseDate = item.getString("releaseDate"), genre = item.getString("genre"), description = item.getString("description"), tracks = listOf(), comments = listOf()))
+                    list.add(i,
+                        Album(
+                            id = item.getInt("id"),
+                            name = item.getString("name"),
+                            cover = item.getString("cover"),
+                            recordLabel = item.getString("recordLabel"),
+                            releaseDate = item.getString("releaseDate"),
+                            genre = item.getString("genre"),
+                            description = item.getString("description"),)
+                    )
                 }
                 onComplete(list)
             },
@@ -46,6 +55,27 @@ class NetworkServiceAdapter constructor(context: Context) {
                 onError(it)
             }))
     }
+
+    fun getAlbum(albumId: Int, onComplete: (resp: Album) -> Unit, onError: (error: VolleyError) -> Unit) {
+        requestQueue.add(getRequest("albums/$albumId",
+            { response ->
+                val item = JSONObject(response)
+                val album = Album(
+                    id = item.getInt("id"),
+                    name = item.getString("name"),
+                    cover = item.getString("cover"),
+                    recordLabel = item.getString("recordLabel"),
+                    releaseDate = item.getString("releaseDate"),
+                    genre = item.getString("genre"),
+                    description = item.getString("description"),
+                )
+                onComplete(album)
+            },
+            {
+                onError(it)
+            }))
+    }
+
 
     fun getArtists(onComplete:(resp:List<Artist>)->Unit, onError: (error:VolleyError)->Unit){
         requestQueue.add(getRequest("musicians",
@@ -61,12 +91,28 @@ class NetworkServiceAdapter constructor(context: Context) {
                             image = item.getString("image"),
                             description = item.getString("description"),
                             birthDate = item.getString("birthDate"),
-                            albums = listOf(),
-                            performerPrizes = listOf()
                         )
                     )
                 }
                 onComplete(list)
+            },
+            {
+                onError(it)
+            }))
+    }
+
+    fun getArtist(id:Int, onComplete:(resp:Artist)->Unit, onError: (error:VolleyError)->Unit){
+        requestQueue.add(getRequest("musicians/$id",
+            { response ->
+                val item = JSONObject(response)
+                val artist = Artist(
+                    id = item.getInt("id"),
+                    name = item.getString("name"),
+                    image = item.getString("image"),
+                    description = item.getString("description"),
+                    birthDate = item.getString("birthDate"),
+                )
+                onComplete(artist)
             },
             {
                 onError(it)
@@ -80,8 +126,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                 val list = mutableListOf<Collector>()
                 for (i in 0 until resp.length()) {
                     val item = resp.getJSONObject(i)
-                    list.add(i, Collector(id = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email"),
-                        collectorAlbums = listOf(), comments = listOf(), favoritePerformers = listOf()))
+                    list.add(i, Collector(id = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email")))
                 }
                 onComplete(list)
             },

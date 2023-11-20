@@ -1,44 +1,51 @@
 package com.example.vinyls_jetpack_application.ui
 
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
 import com.example.vinyls_jetpack_application.database.dao.AppDatabase
-import com.example.vinyls_jetpack_application.databinding.ArtistFragmentBinding
+import com.example.vinyls_jetpack_application.databinding.ArtistDetailFragmentBinding
+import com.example.vinyls_jetpack_application.databinding.CommentFragmentBinding
 import com.example.vinyls_jetpack_application.models.Artist
+import com.example.vinyls_jetpack_application.models.Comment
+import com.example.vinyls_jetpack_application.ui.adapters.ArtistDetailAdapter
 import com.example.vinyls_jetpack_application.ui.adapters.ArtistsAdapter
-import com.example.vinyls_jetpack_application.viewmodels.ArtistViewModel
+import com.example.vinyls_jetpack_application.ui.adapters.CommentsAdapter
+import com.example.vinyls_jetpack_application.viewmodels.ArtistDetailViewModel
+import com.example.vinyls_jetpack_application.viewmodels.CommentViewModel
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
-class ArtistFragment : Fragment() {
-    private var _binding: ArtistFragmentBinding? = null
+class ArtistDetailFragment : Fragment() {
+
+    private var _binding: ArtistDetailFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewModel: ArtistViewModel
-    private var viewModelAdapter: ArtistsAdapter? = null
+    private lateinit var viewModel: ArtistDetailViewModel
+    private var viewModelAdapter: ArtistDetailAdapter? = null
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = ArtistFragmentBinding.inflate(inflater, container, false)
+        _binding = ArtistDetailFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModelAdapter = ArtistsAdapter()
+        viewModelAdapter = ArtistDetailAdapter()
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerView = binding.artistsRv
+        recyclerView = binding.testArtistDetailRv
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
     }
@@ -48,21 +55,29 @@ class ArtistFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        activity.actionBar?.title = "Artist"
+        activity.actionBar?.title = getString(R.string.title_artist_detail)
+        val args: ArtistDetailFragmentArgs by navArgs()
+        Log.d("Args", args.artistId.toString())
 
         val database = AppDatabase.getDatabase(activity.application)
         val artistsDao = database.artistDao()
 
-        viewModel = ViewModelProvider(this, ArtistViewModel.Factory(activity.application, artistsDao)).get(ArtistViewModel::class.java)
-        viewModel.artists.observe(viewLifecycleOwner, Observer<List<Artist>> {
+        viewModel = ViewModelProvider(this, ArtistDetailViewModel.Factory(activity.application,args.artistId, artistsDao)).get(ArtistDetailViewModel::class.java)
+        viewModel.artist.observe(viewLifecycleOwner, Observer<Artist> {
             it.apply {
-                viewModelAdapter!!.artists = this
+                viewModelAdapter!!.artistsDetail = this
+                if(this == null){
+                    binding.testText.visibility = View.VISIBLE
+                }else{
+                    binding.testText.visibility = View.GONE
+                }
             }
         })
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
             if (isNetworkError) onNetworkError()
         })
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -74,4 +89,5 @@ class ArtistFragment : Fragment() {
             viewModel.onNetworkErrorShown()
         }
     }
+
 }
