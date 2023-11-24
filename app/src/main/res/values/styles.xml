@@ -1,0 +1,22 @@
+<resources>
+    <!-- Estilo Base para la Toolbar -->
+    <style name="MiToolbarEstilo" parent="ThemeOverlay.AppCompat.ActionBar">
+        <!-- Color de fondo de la Toolbar -->
+        <item name="android:background">@color/black</item>
+        <!-- Color del título y los ítems del menú -->
+        <item name="android:textColor">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <!-- Estilo para el botón de overflow en la Toolbar -->
+    <style name="MiOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <!-- Aplicar color blanco al ícono -->
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <!-- Estilo personalizado para la Toolbar que incluye el estilo del botón de overflow -->
+    <style name="MiToolbarEstiloConOverflow" parent="MiToolbarEstilo">
+        <item name="actionOverflowButtonStyle">@style/MiOverflowButtonStyle</item>
+    </style>
+</resources>
