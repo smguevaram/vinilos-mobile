@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="album" type="com.example.vinyls_jetpack_application.models.Album"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+            <!-- Contenido de la Tarjeta -->
+            <EditText
+                android:id="@+id/id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ID"
+                tools:ignore="HardcodedText,TextFields,VisualLintTextFieldSize"
+                android:inputType="number"
+                android:importantForAutofill="no" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            android:minHeight="48dp"
+            tools:ignore="HardcodedText,TextFields,VisualLintTextFieldSize"
+            android:inputType="text"
+            android:importantForAutofill="no" />
+
+        <EditText
+            android:id="@+id/cover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Portada"
+            android:minHeight="48dp"
+            tools:ignore="HardcodedText,TextFields,VisualLintTextFieldSize"
+            android:inputType="text"
+            android:autofillHints="" />
+
+        <EditText
+            android:id="@+id/releaseDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de lanzamiento"
+            android:minHeight="48dp"
+            tools:ignore="HardcodedText,TextFields,VisualLintTextFieldSize"
+            android:inputType="datetime"
+            android:importantForAutofill="no" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción"
+            android:minHeight="48dp"
+            tools:ignore="HardcodedText,TextFields,VisualLintTextFieldSize"
+            android:inputType="text"
+            android:autofillHints="" />
+
+        <Spinner
+            android:id="@+id/genre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/generos"
+            android:hint="Genero"
+            android:minHeight="48dp"
+            tools:ignore="HardcodedText" />
+
+        <EditText
+            android:id="@+id/recordLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sello discográfico"
+            android:minHeight="48dp"
+            tools:ignore="HardcodedText,TextFields,VisualLintTextFieldSize"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            />
+    </LinearLayout>
+</layout>
