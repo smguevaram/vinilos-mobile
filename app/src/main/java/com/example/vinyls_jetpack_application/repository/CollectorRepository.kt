@@ -33,7 +33,7 @@ class CollectorRepository (val application: Application, val collectorsDao: Coll
 
             collectorsFromNetwork?.let { collectors ->
                 withContext(Dispatchers.IO) {
-                    collectorsDao.insert(collectors)
+                    collectorsDao.insertAll(collectors)
 
                 }
                 return collectors
@@ -44,6 +44,34 @@ class CollectorRepository (val application: Application, val collectorsDao: Coll
             }
         }
     }
+
+    suspend fun getCollectorById(collectorId: Int): Collector {
+        val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val isConnected = cm.activeNetworkInfo?.isConnected == true
+
+        if (isConnected) {
+            val collectorFromNetwork: Collector? = suspendCoroutine { continuation ->
+                NetworkServiceAdapter.getInstance(application).getCollector(collectorId,
+                    { collector ->
+                        continuation.resume(collector)
+                    },
+                    { error ->
+                        continuation.resume(null)
+                    }
+                )
+            }
+
+            collectorFromNetwork?.let { collector ->
+                withContext(Dispatchers.IO) {
+                    collectorsDao.insert(collector)
+                }
+                return collector
+            }
+        }
+            return withContext(Dispatchers.IO) {
+                collectorsDao.getCollectorById(collectorId)
+            }
+        }
 
 
 }
