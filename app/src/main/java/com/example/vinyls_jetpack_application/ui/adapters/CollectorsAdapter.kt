@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
 import com.example.vinyls_jetpack_application.databinding.CollectorItemBinding
 import com.example.vinyls_jetpack_application.models.Collector
+import com.example.vinyls_jetpack_application.ui.ArtistFragmentDirections
+import com.example.vinyls_jetpack_application.ui.CollectorFragmentDirections
 
 class CollectorsAdapter : RecyclerView.Adapter<CollectorsAdapter.CollectorViewHolder>(){
 
@@ -18,6 +20,7 @@ class CollectorsAdapter : RecyclerView.Adapter<CollectorsAdapter.CollectorViewHo
             field = value
             notifyDataSetChanged()
         }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectorViewHolder {
         val withDataBinding: CollectorItemBinding = DataBindingUtil.inflate(
@@ -34,6 +37,9 @@ class CollectorsAdapter : RecyclerView.Adapter<CollectorsAdapter.CollectorViewHo
         }
         holder.viewDataBinding.root.setOnClickListener {
             Log.d("CollectorAdapter", "Clicked on ${collectors[position].name}")
+            val action = CollectorFragmentDirections.actionCollectorFragmentToCollectorDetailFragment(collectors[position].id)
+            // Navigate using that action
+            holder.viewDataBinding.root.findNavController().navigate(action)
         }
     }
 
