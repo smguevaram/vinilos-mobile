@@ -76,6 +76,27 @@ class NetworkServiceAdapter constructor(context: Context) {
             }))
     }
 
+    fun addAlbum(body: JSONObject, onComplete:(resp:Album)->Unit, onError: (error:VolleyError)->Unit){
+        requestQueue.add(postRequest("albums",
+            body,
+            { response ->
+                val album = Album(
+                    id = response.getInt("id"),
+                    name = response.getString("name"),
+                    cover = response.getString("cover"),
+                    recordLabel = response.getString("recordLabel"),
+                    releaseDate = response.getString("releaseDate"),
+                    genre = response.getString("genre"),
+                    description = response.getString("description"),
+                )
+                onComplete(album)
+            },
+            {
+                Log.d("Error", it.message.toString())
+                onError(it)
+            }))
+    }
+
 
     fun getArtists(onComplete:(resp:List<Artist>)->Unit, onError: (error:VolleyError)->Unit){
         requestQueue.add(getRequest("musicians",
@@ -151,7 +172,7 @@ class NetworkServiceAdapter constructor(context: Context) {
 
     fun getComments(albumId:Int, onComplete:(resp:List<Comment>)->Unit, onError: (error:VolleyError)->Unit) {
         requestQueue.add(getRequest("albums/$albumId/comments",
-            Response.Listener<String> { response ->
+            { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<Comment>()
                 var item:JSONObject? = null
@@ -162,17 +183,17 @@ class NetworkServiceAdapter constructor(context: Context) {
                 }
                 onComplete(list)
             },
-            Response.ErrorListener {
+            {
                 onError(it)
             }))
     }
     fun postComment(body: JSONObject, albumId: Int,  onComplete:(resp:JSONObject)->Unit , onError: (error:VolleyError)->Unit){
         requestQueue.add(postRequest("albums/$albumId/comments",
             body,
-            Response.Listener<JSONObject> { response ->
+            { response ->
                 onComplete(response)
             },
-            Response.ErrorListener {
+            {
                 onError(it)
             }))
     }

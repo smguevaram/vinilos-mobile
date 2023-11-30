@@ -22,7 +22,15 @@
         <action
             android:id="@+id/action_albumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+        <action
+            android:id="@+id/action_albumFragment_to_albumAddDataFragment"
+            app:destination="@id/albumAddDataFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/albumAddDataFragment"
+        android:name="com.example.vinyls_jetpack_application.ui.AlbumAddFragment"
+        android:label="Agregar album"
+        tools:layout="@layout/album_add_data_fragment" />
     <fragment
         android:id="@+id/commentFragment"
         android:name="com.example.vinyls_jetpack_application.ui.CommentFragment"

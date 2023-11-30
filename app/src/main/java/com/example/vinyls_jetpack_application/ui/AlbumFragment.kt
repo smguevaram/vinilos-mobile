@@ -1,6 +1,7 @@
 package com.example.vinyls_jetpack_application.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vinyls_jetpack_application.R
@@ -41,6 +43,12 @@ class AlbumFragment : Fragment() {
         recyclerView = binding.albumsRv
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
+
+        binding.addAlbumButton.setOnClickListener {
+            Log.d("AlbumFragment", "Button clicked")
+            val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumAddDataFragment()
+            this.view?.let { it1 -> action.let { it2 -> it1.findNavController().navigate(it2) } }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

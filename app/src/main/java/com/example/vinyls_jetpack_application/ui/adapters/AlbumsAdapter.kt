@@ -47,12 +47,9 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
 
     override fun onBindViewHolder(holder: AlbumsAdapter.AlbumViewHolder, position: Int) {
         holder.viewDataBinding.also {
-            Log.d("AlbumsAdapter", "album: $albumsDetail")
             it.album = albums[position]
         }
         holder.viewDataBinding.root.setOnClickListener {
-            Log.d("AlbumsAdapter", "Clicked on ${albums[position]}")
-            Log.d("AlbumsAdapter", "mode: $mode")
             albumsDetail = albums[position]
             val action = AlbumFragmentDirections.actionAlbumFragmentToAlbumDetailFragment(albums[position].id)
             // Navigate using that action

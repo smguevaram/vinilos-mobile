@@ -20,6 +20,11 @@ class AlbumViewModel(application: Application, albumsDao: AlbumDao) :  AndroidVi
 
     val _albumsRepository = AlbumRepository(application, albumsDao)
 
+    private val _eventAlbumCreated = MutableLiveData<Boolean>(false)
+
+    val eventAlbumCreated: LiveData<Boolean>
+        get() = _eventAlbumCreated
+
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
 
     val eventNetworkError: LiveData<Boolean>
@@ -40,6 +45,20 @@ class AlbumViewModel(application: Application, albumsDao: AlbumDao) :  AndroidVi
 
             if(data != null) {
                 _albums.postValue(data)
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } else {
+                _eventNetworkError.value = true
+            }
+        }
+    }
+
+    fun addAlbum(name: String, cover: String, releaseDate: String, description: String, genre: String, recordLabel: String) {
+        viewModelScope.launch {
+            val success: Album? = _albumsRepository.addAlbum(name, cover, releaseDate, description, genre, recordLabel)
+
+            if (success is Album) {
+                _eventAlbumCreated.value = true
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } else {
