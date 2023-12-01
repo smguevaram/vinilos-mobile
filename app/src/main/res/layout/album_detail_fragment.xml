@@ -1,23 +1,125 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.AlbumDetailFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/testText"
+    <data>
+        <variable
+            name="album"
+            type="com.example.vinyls_jetpack_application.models.Album" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello"
-        android:visibility="visible"
-        />
+        tools:context=".ui.AlbumDetailFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/testAlbumDetailRv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:id="@+id/testText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Hello"
+                android:visibility="visible" />
 
-</FrameLayout>
+            <!-- Contenido de la Tarjeta -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp"
+                android:layout_margin="8dp"
+                tools:ignore="MissingConstraints"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Nombre del Album -->
+                    <TextView
+                        android:id="@+id/textAlbumName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{album.name}"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <!-- Biografía -->
+                    <TextView
+                        android:id="@+id/textBiography"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@{album.description}"
+                        android:textSize="18sp" />
+
+                    <!-- Fecha de Nacimiento -->
+                    <TextView
+                        android:id="@+id/textGenre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@{album.genre}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Título "Comentarios" -->
+            <TextView
+                android:id="@+id/textCommentsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comentarios"
+                android:textSize="20sp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <Space
+                android:id="@+id/space"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toEndOf="@id/textCommentsTitle"
+                app:layout_constraintEnd_toStartOf="@id/btnAddComment"
+                app:layout_constraintTop_toTopOf="@id/textCommentsTitle"
+                app:layout_constraintBottom_toBottomOf="@id/textCommentsTitle"/>
+
+            <!-- Botón "+" -->
+
+            <!-- RecyclerView -->
+
+            <ImageButton
+                android:id="@+id/btnAddComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Agregar Comentario"
+                android:src="@android:drawable/ic_input_add"
+                app:layout_constraintBottom_toBottomOf="@id/textCommentsTitle"
+                app:layout_constraintStart_toEndOf="@+id/textCommentsTitle"
+                app:layout_constraintTop_toTopOf="@id/textCommentsTitle"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/commentsRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/textCommentsTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/comment_item">
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>

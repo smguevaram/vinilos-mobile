@@ -179,7 +179,7 @@ class NetworkServiceAdapter constructor(context: Context) {
                 for (i in 0 until resp.length()) {
                     item = resp.getJSONObject(i)
                     Log.d("Response", item.toString())
-                    list.add(i, Comment(id = albumId, rating = item.getInt("rating").toString(), description = item.getString("description")))
+                    list.add(i, Comment(id = item.getInt("id"), rating = item.getInt("rating"), description = item.getString("description"), collector = "test"))
                 }
                 onComplete(list)
             },
@@ -187,11 +187,13 @@ class NetworkServiceAdapter constructor(context: Context) {
                 onError(it)
             }))
     }
-    fun postComment(body: JSONObject, albumId: Int,  onComplete:(resp:JSONObject)->Unit , onError: (error:VolleyError)->Unit){
+    fun postComment(body: JSONObject, albumId: Int,  onComplete:(resp:Comment)->Unit , onError: (error:VolleyError)->Unit){
         requestQueue.add(postRequest("albums/$albumId/comments",
             body,
             { response ->
-                onComplete(response)
+                val comment = JSONObject(response.toString())
+                val commentToReturn = Comment(id = comment.getInt("id"), rating = comment.getInt("rating"), description = comment.getString("description"), collector = "test")
+                onComplete(commentToReturn)
             },
             {
                 onError(it)

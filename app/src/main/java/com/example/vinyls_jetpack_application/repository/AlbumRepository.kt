@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import com.example.vinyls_jetpack_application.database.dao.AlbumDao
 import com.example.vinyls_jetpack_application.models.Album
+import com.example.vinyls_jetpack_application.models.Comment
 import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -72,6 +73,29 @@ class AlbumRepository (val application: Application,  val albumsDao: AlbumDao) {
         }
     }
 
+    suspend fun getCommentsByAlbumId(id: Int): List<Comment>? {
+        val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val isConnected = cm.activeNetworkInfo?.isConnected == true
+
+        if (isConnected) {
+            val commentsFromNetwork: List<Comment>? = suspendCoroutine { continuation ->
+                NetworkServiceAdapter.getInstance(application).getComments(id,
+                    { comments ->
+                        continuation.resume(comments)
+                    },
+                    {
+                        continuation.resume(null)
+                    }
+                )
+            }
+
+            commentsFromNetwork?.let { comments ->
+                return comments
+            }
+        }
+        return listOf()
+    }
+
     suspend fun addAlbum(name: String, cover: String, releaseDate: String, description: String, genre: String, recordLabel: String): Album? {
         val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val isConnected = cm.activeNetworkInfo?.isConnected == true
@@ -100,6 +124,35 @@ class AlbumRepository (val application: Application,  val albumsDao: AlbumDao) {
                     albumsDao.insert(album)
                 }
                 return album
+            }
+
+        }
+        return null
+    }
+
+    suspend fun addCommentToAlbum(albumId: Int, comment: String, rating: Int): Comment? {
+        val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val isConnected = cm.activeNetworkInfo?.isConnected == true
+
+        if(isConnected) {
+            val commentToSend = Comment(0, comment, rating, "test")
+            val commentJson = JSONObject()
+            commentJson.put("description", commentToSend.description)
+            commentJson.put("rating", commentToSend.rating)
+            commentJson.put("collector", "{\"id\":100}")
+
+            val commentFromNetwork: Comment? = suspendCoroutine { continuation ->
+                NetworkServiceAdapter.getInstance(application).postComment(commentJson, albumId,
+                    { comment ->
+                        continuation.resume(comment)
+                    }
+                ) {
+                    continuation.resume(null)
+                }
+            }
+
+            commentFromNetwork?.let { comment ->
+                return comment
             }
 
         }
