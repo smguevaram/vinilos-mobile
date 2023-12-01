@@ -11,6 +11,7 @@ import com.example.vinyls_jetpack_application.database.dao.AlbumDao
 import com.example.vinyls_jetpack_application.database.dao.ArtistDao
 import com.example.vinyls_jetpack_application.models.Album
 import com.example.vinyls_jetpack_application.models.Artist
+import com.example.vinyls_jetpack_application.models.Comment
 import com.example.vinyls_jetpack_application.network.NetworkServiceAdapter
 import com.example.vinyls_jetpack_application.repository.AlbumRepository
 import com.example.vinyls_jetpack_application.repository.ArtistRepository
@@ -19,11 +20,20 @@ import kotlinx.coroutines.launch
 class AlbumDetailViewModel(application: Application, albumId: Int, albumsDao: AlbumDao) :  AndroidViewModel(application)  {
 
     private val _album= MutableLiveData<Album>();
+    private val _comments = MutableLiveData<List<Comment>>()
 
     private val _albumRepository = AlbumRepository(application, albumsDao)
 
+    private val _eventCommentAdded = MutableLiveData<Boolean>(false)
+
+    val eventCommentAdded: LiveData<Boolean>
+        get() = _eventCommentAdded
+
     val album: MutableLiveData<Album>
         get() = _album
+
+    val comments: MutableLiveData<List<Comment>>
+        get() = _comments
 
     private var _eventNetworkError = MutableLiveData<Boolean>(false)
 
@@ -45,9 +55,25 @@ class AlbumDetailViewModel(application: Application, albumId: Int, albumsDao: Al
     private fun refreshDataFromNetwork() {
         viewModelScope.launch {
             var data: Album? = _albumRepository.getAlbum(id)
+            var commentsFromBack: List<Comment>? = _albumRepository.getCommentsByAlbumId(id)
 
             if(data != null) {
                 _album.postValue(data)
+                _comments.postValue(commentsFromBack)
+                _eventNetworkError.value = false
+                _isNetworkErrorShown.value = false
+            } else {
+                _eventNetworkError.value = true
+            }
+        }
+    }
+
+    fun addComment(albumId: Int, description: String, rating: Int) {
+        viewModelScope.launch {
+            var commentAddedSuccessfully: Comment? = _albumRepository.addCommentToAlbum(albumId, description, rating)
+
+            if (commentAddedSuccessfully is Comment) {
+                _eventCommentAdded.value = true
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
             } else {
