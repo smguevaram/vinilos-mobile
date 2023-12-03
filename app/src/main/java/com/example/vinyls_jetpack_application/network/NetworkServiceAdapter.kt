@@ -76,6 +76,27 @@ class NetworkServiceAdapter constructor(context: Context) {
             }))
     }
 
+    fun addAlbum(body: JSONObject, onComplete:(resp:Album)->Unit, onError: (error:VolleyError)->Unit){
+        requestQueue.add(postRequest("albums",
+            body,
+            { response ->
+                val album = Album(
+                    id = response.getInt("id"),
+                    name = response.getString("name"),
+                    cover = response.getString("cover"),
+                    recordLabel = response.getString("recordLabel"),
+                    releaseDate = response.getString("releaseDate"),
+                    genre = response.getString("genre"),
+                    description = response.getString("description"),
+                )
+                onComplete(album)
+            },
+            {
+                Log.d("Error", it.message.toString())
+                onError(it)
+            }))
+    }
+
 
     fun getArtists(onComplete:(resp:List<Artist>)->Unit, onError: (error:VolleyError)->Unit){
         requestQueue.add(getRequest("musicians",
@@ -135,30 +156,46 @@ class NetworkServiceAdapter constructor(context: Context) {
                 Log.d("", it.message.toString())
             }))
     }
+
+    fun getCollector(id:Int, onComplete:(resp:Collector)->Unit, onError: (error:VolleyError)->Unit) {
+        requestQueue.add(getRequest("collectors/$id",
+            { response ->
+                val item = JSONObject(response)
+                val collector = Collector(id = item.getInt("id"),name = item.getString("name"), telephone = item.getString("telephone"), email = item.getString("email"))
+                onComplete(collector)
+            },
+            {
+                onError(it)
+            }))
+    }
+
+
     fun getComments(albumId:Int, onComplete:(resp:List<Comment>)->Unit, onError: (error:VolleyError)->Unit) {
         requestQueue.add(getRequest("albums/$albumId/comments",
-            Response.Listener<String> { response ->
+            { response ->
                 val resp = JSONArray(response)
                 val list = mutableListOf<Comment>()
                 var item:JSONObject? = null
                 for (i in 0 until resp.length()) {
                     item = resp.getJSONObject(i)
                     Log.d("Response", item.toString())
-                    list.add(i, Comment(id = albumId, rating = item.getInt("rating").toString(), description = item.getString("description")))
+                    list.add(i, Comment(id = item.getInt("id"), rating = item.getInt("rating"), description = item.getString("description"), collector = "test"))
                 }
                 onComplete(list)
             },
-            Response.ErrorListener {
+            {
                 onError(it)
             }))
     }
-    fun postComment(body: JSONObject, albumId: Int,  onComplete:(resp:JSONObject)->Unit , onError: (error:VolleyError)->Unit){
+    fun postComment(body: JSONObject, albumId: Int,  onComplete:(resp:Comment)->Unit , onError: (error:VolleyError)->Unit){
         requestQueue.add(postRequest("albums/$albumId/comments",
             body,
-            Response.Listener<JSONObject> { response ->
-                onComplete(response)
+            { response ->
+                val comment = JSONObject(response.toString())
+                val commentToReturn = Comment(id = comment.getInt("id"), rating = comment.getInt("rating"), description = comment.getString("description"), collector = "test")
+                onComplete(commentToReturn)
             },
-            Response.ErrorListener {
+            {
                 onError(it)
             }))
     }

@@ -9,17 +9,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/black">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/stroke_color"
-            android:layout_marginBottom="15dp">
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,10 +48,10 @@
                     android:id="@+id/imageView2"
                     android:layout_width="74dp"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
                     android:layout_weight="0"
-                    app:srcCompat="@drawable/arrow"
-                    android:importantForAccessibility="no" />
+                    android:gravity="end"
+                    android:importantForAccessibility="no"
+                    app:srcCompat="@drawable/arrow" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

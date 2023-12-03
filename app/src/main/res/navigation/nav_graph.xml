@@ -8,23 +8,34 @@
         android:id="@+id/collectorFragment"
         android:name="com.example.vinyls_jetpack_application.ui.CollectorFragment"
         android:label="Coleccionistas"
-        tools:layout="@layout/collector_fragment" >
+        tools:layout="@layout/collector_fragment">
+        <action
+            android:id="@+id/action_collectorFragment_to_collectorDetailFragment"
+            app:destination="@id/collectorDetailFragment" />
 
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
         android:name="com.example.vinyls_jetpack_application.ui.AlbumFragment"
         android:label="Albums"
-        tools:layout="@layout/album_fragment" >
+        tools:layout="@layout/album_fragment">
         <action
             android:id="@+id/action_albumFragment_to_albumDetailFragment"
             app:destination="@id/albumDetailFragment" />
+        <action
+            android:id="@+id/action_albumFragment_to_albumAddDataFragment"
+            app:destination="@id/albumAddDataFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/albumAddDataFragment"
+        android:name="com.example.vinyls_jetpack_application.ui.AlbumAddFragment"
+        android:label="Agregar album"
+        tools:layout="@layout/album_add_data_fragment" />
     <fragment
         android:id="@+id/commentFragment"
         android:name="com.example.vinyls_jetpack_application.ui.CommentFragment"
         android:label="comment_fragment"
-        tools:layout="@layout/comment_fragment" >
+        tools:layout="@layout/comment_fragment">
         <argument
             android:name="albumId"
             app:argType="integer" />
@@ -33,8 +44,7 @@
         android:id="@+id/artistFragment"
         android:name="com.example.vinyls_jetpack_application.ui.ArtistFragment"
         android:label="Artists"
-        tools:layout="@layout/artist_fragment"
-        >
+        tools:layout="@layout/artist_fragment">
         <action
             android:id="@+id/action_artistFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment" />
@@ -43,7 +53,7 @@
         android:id="@+id/artistDetailFragment"
         android:name="com.example.vinyls_jetpack_application.ui.ArtistDetailFragment"
         android:label="Artista"
-        tools:layout="@layout/artist_detail_fragment" >
+        tools:layout="@layout/artist_detail_fragment">
         <argument
             android:name="artistId"
             app:argType="integer" />
@@ -52,9 +62,37 @@
         android:id="@+id/albumDetailFragment"
         android:name="com.example.vinyls_jetpack_application.ui.AlbumDetailFragment"
         android:label="Album"
-        tools:layout="@layout/album_detail_fragment" >
+        tools:layout="@layout/album_detail_fragment">
         <argument
             android:name="albumId"
-            app:argType="integer"/>
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_albumFragment_to_albumAddCommentFragment"
+            app:destination="@id/albumCommentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumCommentFragment"
+        android:name="com.example.vinyls_jetpack_application.ui.AlbumAddCommentFragment"
+        android:label="Agregar Comentario"
+        tools:layout="@layout/album_comment_fragment">
+        <argument
+            android:name="albumId"
+            app:argType="integer" />
+        <argument
+            android:name="albumName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_albumCommentFragment_to_albumDetailFragment"
+            app:destination="@id/albumDetailFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/collectorDetailFragment"
+        android:name="com.example.vinyls_jetpack_application.ui.CollectorDetailFragment"
+        android:label="Album"
+        tools:layout="@layout/collector_detail_fragment">
+        <argument
+            android:name="collectorId"
+            app:argType="integer" />
     </fragment>
 </navigation>

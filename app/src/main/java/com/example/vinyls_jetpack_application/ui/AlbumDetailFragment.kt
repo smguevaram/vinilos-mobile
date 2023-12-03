@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +31,7 @@ class AlbumDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: AlbumDetailViewModel
-    private var viewModelAdapter: AlbumDetailAdapter? = null
+    private var viewModelAdapter: CommentsAdapter? = null
 
 
 
@@ -40,12 +41,12 @@ class AlbumDetailFragment : Fragment() {
     ): View? {
         _binding = AlbumDetailFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModelAdapter = AlbumDetailAdapter()
+        viewModelAdapter = CommentsAdapter()
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerView = binding.testAlbumDetailRv
+        recyclerView = binding.commentsRv
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
     }
@@ -65,7 +66,7 @@ class AlbumDetailFragment : Fragment() {
         viewModel = ViewModelProvider(this, AlbumDetailViewModel.Factory(activity.application,args.albumId, albumsDao)).get(AlbumDetailViewModel::class.java)
         viewModel.album.observe(viewLifecycleOwner, Observer<Album> {
             it.apply {
-                viewModelAdapter!!.albumsDetail = this
+                binding.album = it
                 if(this == null){
                     binding.testText.visibility = View.VISIBLE
                 }else{
@@ -76,6 +77,18 @@ class AlbumDetailFragment : Fragment() {
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
             if (isNetworkError) onNetworkError()
         })
+
+        viewModel.comments.observe(viewLifecycleOwner, Observer<List<Comment>> { comments ->
+            comments.apply {
+                viewModelAdapter?.comments = comments
+            }
+        })
+
+        binding.btnAddComment.setOnClickListener {
+            val action = AlbumDetailFragmentDirections.actionAlbumFragmentToAlbumAddCommentFragment(args.albumId,binding.textAlbumName.text.toString())
+            this.view?.let { it1 -> action.let { it2 -> it1.findNavController().navigate(it2) } }
+
+        }
     }
 
     override fun onDestroyView() {

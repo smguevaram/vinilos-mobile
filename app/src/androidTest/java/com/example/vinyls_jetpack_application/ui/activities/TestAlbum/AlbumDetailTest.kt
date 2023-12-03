@@ -26,7 +26,7 @@ class AlbumDetailTest {
         Espresso.onView(ViewMatchers.withId(R.id.albumDetailFragment))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
-        Espresso.onView(ViewMatchers.withId(R.id.testAlbumDetailRv))
+        Espresso.onView(ViewMatchers.withId(R.id.albumDetailFragment))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
         Espresso.onView(ViewMatchers.withId(R.id.testText))
